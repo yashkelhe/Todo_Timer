@@ -5,6 +5,7 @@ function localDateTime(date) {
   const local = new Date(
     date.getTime() - date.getTimezoneOffset() * 60000
   );
+
   return local.toISOString().slice(0, 16);
 }
 
@@ -50,18 +51,19 @@ export default function App() {
   });
 
   const [purpose, setPurpose] = useState("");
-  const [elapsed, setElapsed] = useState(0);
-  const [startedAt, setStartedAt] = useState(null);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 1000);
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     try {
       localStorage.setItem("todos", JSON.stringify(todos));
-      setMessage("");
     } catch {
       setMessage("Could not save tasks in this browser.");
     }
@@ -104,25 +106,15 @@ export default function App() {
     );
   }
 
-  function toggleCounter() {
-    const current = Date.now();
-
-    if (startedAt !== null) {
-      setElapsed((previous) => previous + current - startedAt);
-      setStartedAt(null);
-    } else {
-      setNow(current);
-      setStartedAt(current);
-    }
+  function deleteTodo(id) {
+    setTodos((previous) => previous.filter((todo) => todo.id !== id));
   }
 
-  function resetCounter() {
-    setElapsed(0);
-    setStartedAt(null);
+  function setQuickTime(hours) {
+    setDeadline(
+      localDateTime(new Date(Date.now() + hours * 3600000))
+    );
   }
-
-  const counterTime =
-    elapsed + (startedAt !== null ? Math.max(0, now - startedAt) : 0);
 
   return (
     <main className="app">
@@ -135,11 +127,12 @@ export default function App() {
           <label>
             Task
             <input
+              type="text"
               value={task}
               onChange={(event) => setTask(event.target.value)}
               placeholder="What needs to be done?"
-              required
               maxLength={200}
+              required
             />
           </label>
 
@@ -154,21 +147,17 @@ export default function App() {
           </label>
 
           <div className="actions">
-            {[1, 24, 168].map((hours, index) => (
-              <button
-                type="button"
-                key={hours}
-                onClick={() =>
-                  setDeadline(
-                    localDateTime(
-                      new Date(Date.now() + hours * 3600000)
-                    )
-                  )
-                }
-              >
-                {["+1 hour", "+1 day", "+1 week"][index]}
-              </button>
-            ))}
+            <button type="button" onClick={() => setQuickTime(1)}>
+              +1 hour
+            </button>
+
+            <button type="button" onClick={() => setQuickTime(24)}>
+              +1 day
+            </button>
+
+            <button type="button" onClick={() => setQuickTime(168)}>
+              +1 week
+            </button>
 
             <button type="submit" className="primary">
               Add task
@@ -176,7 +165,11 @@ export default function App() {
           </div>
         </form>
 
-        {message && <p role="status" className="message">{message}</p>}
+        {message && (
+          <p role="status" className="message">
+            {message}
+          </p>
+        )}
 
         {todos.length === 0 ? (
           <p className="empty">No tasks yet.</p>
@@ -210,12 +203,8 @@ export default function App() {
                 <button
                   type="button"
                   className="delete"
+                  onClick={() => deleteTodo(todo.id)}
                   aria-label={`Delete ${todo.text}`}
-                  onClick={() =>
-                    setTodos((previous) =>
-                      previous.filter((item) => item.id !== todo.id)
-                    )
-                  }
                 >
                   Delete
                 </button>
@@ -231,30 +220,43 @@ export default function App() {
         <label>
           What for?
           <input
+            type="text"
             value={purpose}
             onChange={(event) => setPurpose(event.target.value)}
-            placeholder="e.g. Reading, coding, studying"
+            placeholder="e.g. Questions solved, sets, tasks"
             maxLength={100}
           />
         </label>
 
-        <div className="counter-display" role="timer">
-          {formatTime(counterTime)}
-        </div>
-
-        <div className="actions">
+        <div className="number-counter">
           <button
             type="button"
-            className="primary"
-            onClick={toggleCounter}
+            className="count-button"
+            onClick={() => setCount((previous) => previous - 1)}
+            aria-label="Decrease count"
           >
-            {startedAt !== null ? "Pause" : "Start"}
+            −
           </button>
 
-          <button type="button" onClick={resetCounter}>
-            Reset
+          <output className="count-value">{count}</output>
+
+          <button
+            type="button"
+            className="count-button"
+            onClick={() => setCount((previous) => previous + 1)}
+            aria-label="Increase count"
+          >
+            +
           </button>
         </div>
+
+        <button
+          type="button"
+          className="reset-button"
+          onClick={() => setCount(0)}
+        >
+          Reset
+        </button>
       </section>
     </main>
   );
