@@ -2,9 +2,9 @@
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  color: #222;
-  background: #f7f7f7;
-  color-scheme: light;
+  color: #eee;
+  background: #080808;
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
