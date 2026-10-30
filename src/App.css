@@ -1,5 +1,5 @@
 .app {
-  width: min(100% - 32px, 600px);
+  width: min(100% - 32px, 640px);
   margin: 40px auto;
 }
 
@@ -18,9 +18,9 @@ h2 {
 .panel {
   padding: 24px;
   margin-bottom: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid #292929;
   border-radius: 8px;
-  background: #fff;
+  background: #111;
 }
 
 .todo-form,
@@ -35,45 +35,49 @@ label {
 
 label {
   font-size: 14px;
-  color: #555;
+  color: #aaa;
 }
 
 input:not([type="checkbox"]) {
   width: 100%;
   min-width: 0;
   padding: 10px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #333;
   border-radius: 5px;
-  background: #fff;
-  color: #222;
+  background: #191919;
+  color: #eee;
+}
+
+input::placeholder {
+  color: #777;
 }
 
 button {
   padding: 9px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #383838;
   border-radius: 5px;
-  background: #fff;
-  color: #333;
+  background: #1c1c1c;
+  color: #ddd;
   cursor: pointer;
 }
 
 button:hover {
-  background: #f2f2f2;
+  background: #2a2a2a;
 }
 
 button.primary {
-  background: #333;
-  border-color: #333;
-  color: #fff;
+  background: #ddd;
+  border-color: #ddd;
+  color: #111;
 }
 
 button.primary:hover {
-  background: #444;
+  background: #fff;
 }
 
 input:focus-visible,
 button:focus-visible {
-  outline: 2px solid #666;
+  outline: 2px solid #aaa;
   outline-offset: 3px;
 }
 
@@ -93,16 +97,16 @@ button:focus-visible {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 0;
-  border-top: 1px solid #eee;
+  padding: 18px 0;
+  border-top: 1px solid #292929;
 }
 
 .todo-item input[type="checkbox"] {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   margin: 0;
   flex-shrink: 0;
-  accent-color: #444;
+  accent-color: #aaa;
   cursor: pointer;
 }
 
@@ -112,40 +116,68 @@ button:focus-visible {
   overflow-wrap: anywhere;
 }
 
+/* Bigger todo countdown */
 .todo-content small {
   display: block;
-  margin-top: 4px;
-  color: #777;
-  font-size: 12px;
+  margin-top: 6px;
+  color: #eee;
+  font-size: 22px;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
 .completed {
   text-decoration: line-through;
-  color: #888;
+  color: #777;
 }
 
 .delete {
   padding: 6px 8px;
   font-size: 12px;
+  color: #aaa;
 }
 
 .empty,
 .message {
   margin: 20px 0 0;
-  color: #777;
+  color: #999;
   font-size: 14px;
 }
 
 .message {
-  color: #a33524;
+  color: #f0a090;
 }
 
-.counter-display {
-  margin: 24px 0;
-  font-size: clamp(30px, 8vw, 42px);
+.number-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin: 28px 0 20px;
+}
+
+.count-button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  flex-shrink: 0;
+  font-size: 28px;
+}
+
+.count-value {
+  min-width: 80px;
+  text-align: center;
+  font-size: 48px;
+  line-height: 1.2;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
+}
+
+.reset-button {
+  display: block;
+  margin: 0 auto;
 }
 
 @media (max-width: 480px) {
@@ -155,5 +187,13 @@ button:focus-visible {
 
   .panel {
     padding: 18px;
+  }
+
+  .todo-content small {
+    font-size: 20px;
+  }
+
+  .number-counter {
+    gap: 16px;
   }
 }
